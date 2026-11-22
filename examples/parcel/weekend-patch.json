@@ -1,0 +1,9 @@
+{
+  "upsert_nodes": [
+    {"id":"weekend","kind":"concept","parent":"dispatch","label":"Weekend handoff","description":"Weekend dispatch windows have a separate cutoff."}
+  ],
+  "upsert_edges": [
+    {"id":"delay-weekend","from":"dispatch-delay","to":"weekend","kind":"depends_on"},
+    {"id":"weekend-playbook","from":"weekend","to":"playbook","kind":"defined_in","anchor":"weekend-handoff"}
+  ]
+}

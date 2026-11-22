@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Ontology Workbench</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Ontology Workbench home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><b></b></span>
+      <span>Ontology <strong>Workbench</strong></span>
+    </a>
+    <div class="masthead-actions">
+      <label class="space-picker">Workspace <select id="spaces" aria-label="Workspace"></select></label>
+      <button id="proposals" type="button" class="header-action">Review proposals <span id="pending-count"></span></button>
+    </div>
+  </header>
+
+  <main>
+    <div class="titlebar">
+      <div>
+        <h1 id="space-title">Knowledge graph</h1>
+        <p id="workspace-note">Explore metrics, their dependencies, and the documents behind them.</p>
+      </div>
+      <div class="revision-tools">
+        <span id="revision" class="revision" aria-live="polite"></span>
+        <button id="export" type="button" disabled>Download YAML</button>
+        <button id="draft" type="button" class="primary" disabled>New proposal</button>
+      </div>
+    </div>
+
+    <p id="notice" class="notice" role="status" hidden></p>
+    <section id="review-banner" class="review-banner" aria-labelledby="review-title" hidden>
+      <div><strong id="review-title"></strong><p id="review-summary"></p></div>
+      <div class="review-actions">
+        <button id="changes" type="button">View patch</button>
+        <button id="exit-review" type="button">Back to published</button>
+        <button id="reject" type="button">Reject</button>
+        <button id="approve" type="button" class="primary">Approve and publish</button>
+      </div>
+    </section>
+
+    <div class="workbench">
+      <nav class="index-panel" aria-label="Graph index">
+        <h2>Index</h2>
+        <div id="node-list"><p class="muted">Loading workspace…</p></div>
+      </nav>
+      <section class="graph-panel" aria-label="Graph explorer">
+        <div class="graph-toolbar">
+          <div class="view-switch" role="group" aria-label="Graph layout">
+            <button type="button" data-view="flow" aria-pressed="true">Evidence flow</button>
+            <button type="button" data-view="layers" aria-pressed="false">Ontology layers</button>
+          </div>
+          <label class="budget">Trace budget <select id="budget" aria-label="Trace budget">
+            <option value="2">2</option><option value="4" selected>4</option><option value="6">6</option>
+            <option value="8">8</option><option value="12">12</option>
+          </select></label>
+        </div>
+        <div id="graph-viewport" class="graph-viewport">
+          <div id="diagram" class="diagram">
+            <canvas aria-hidden="true"></canvas>
+            <div class="graph-guides" aria-hidden="true"></div>
+            <div class="graph-nodes" role="group" aria-label="Graph nodes"></div>
+          </div>
+          <p id="empty-graph" class="empty-graph" hidden>Start with a domain and a source. Submit a proposal to add them to the graph.</p>
+        </div>
+        <div class="graph-footer">
+          <div class="legend" aria-label="Node types">
+            <span class="metric">Metric</span><span class="concept">Concept</span><span class="source">Source</span>
+          </div>
+          <span id="graph-count"></span>
+        </div>
+      </section>
+      <aside id="inspector" class="inspector" aria-label="Node and evidence details"></aside>
+    </div>
+  </main>
+
+  <dialog id="review-dialog" aria-labelledby="queue-title">
+    <header class="dialog-head"><h2 id="queue-title">Review proposals</h2><button type="button" data-close>Close</button></header>
+    <div id="queue"></div>
+  </dialog>
+
+  <dialog id="draft-dialog" aria-labelledby="draft-title">
+    <header class="dialog-head"><h2 id="draft-title">New proposal</h2><button type="button" data-close>Close</button></header>
+    <form id="draft-form">
+      <div id="ai-fields" class="assistant" hidden>
+        <label>Draft with DeepSeek<textarea id="instruction" rows="3" placeholder="Describe a change to the ontology"></textarea></label>
+        <label class="check"><input id="share" type="checkbox"> Send the instruction and published graph metadata to DeepSeek.</label>
+        <button id="generate" type="button">Generate draft</button>
+      </div>
+      <label>Title <input id="proposal-title" required maxlength="140"></label>
+      <label>Patch (JSON)<textarea id="patch" spellcheck="false" rows="9" required></textarea></label>
+      <output id="draft-message" aria-live="polite"></output>
+      <button type="submit" class="primary">Submit for review</button>
+    </form>
+  </dialog>
+
+  <dialog id="text-dialog" aria-labelledby="text-title">
+    <header class="dialog-head"><h2 id="text-title"></h2><button type="button" data-close>Close</button></header>
+    <p id="text-location" class="mono"></p><pre id="text-body"></pre>
+  </dialog>
+
+  <dialog id="unlock-dialog" aria-labelledby="unlock-title">
+    <header class="dialog-head"><h2 id="unlock-title">Open your workspace</h2></header>
+    <form id="unlock-form">
+      <label>Reviewer token <input id="token" type="password" autocomplete="off" required autofocus></label>
+      <output id="unlock-message" aria-live="polite"></output>
+      <button type="submit" class="primary">Open workspace</button>
+    </form>
+  </dialog>
+</body>
+</html>

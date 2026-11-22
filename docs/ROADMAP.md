@@ -1,15 +1,7 @@
-# 路线图
+# Roadmap
 
-这里记录项目方向，不承诺尚未确定的完成时间。
+The first version supports evidence tracing, per-workspace revisions, review and MCP. The demo workflow is described in the [README](../README.md).
 
-## 当前阶段
-
-填写项目正在解决的问题与已可用能力。
-
-## 下一步
-
-- [ ] 用具体用户场景定义第一个可验证的目标。
-- [ ] 提供最小示例和对应的预期结果。
-- [ ] 根据实际反馈决定后续优先级。
-
-进入开发的工作请关联具体 Issue，完成后更新状态。
+- Design an import command with dry-run output for larger hand-authored graphs.
+- Add graph comparison for two arbitrary published revisions.
+- Add multiple reviewer identities with a standard identity provider for shared deployments.

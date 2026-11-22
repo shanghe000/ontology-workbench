@@ -9,3 +9,11 @@ __pycache__/
 .vscode/
 dist/
 build/
+
+# Workbench runtime state
+*.access.json
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal
+/workbench

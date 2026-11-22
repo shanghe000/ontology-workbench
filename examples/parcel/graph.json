@@ -1,0 +1,26 @@
+{
+  "revision": 1,
+  "nodes": [
+    {"id":"delivery","kind":"domain","label":"Delivery performance","description":"How consistently a parcel reaches its destination by the promised time."},
+    {"id":"dispatch","kind":"domain","label":"Dispatch operations","description":"How parcels move from a sorting hub to a carrier."},
+    {"id":"on-time","kind":"metric","parent":"delivery","label":"On-time delivery","description":"Share of completed parcels delivered by the promised time.","rule":"Delivered by promise ÷ completed parcels"},
+    {"id":"handoff-time","kind":"metric","parent":"dispatch","label":"Handoff latency","description":"Time between a parcel being ready and the carrier accepting it.","rule":"First accepted scan − ready timestamp"},
+    {"id":"delivery-window","kind":"concept","parent":"delivery","label":"Promised window","description":"The delivery deadline recorded when the parcel is accepted."},
+    {"id":"dispatch-delay","kind":"concept","parent":"dispatch","label":"Dispatch delay","description":"A handoff after the hub’s dispatch cutoff may reduce the time available for delivery."},
+    {"id":"capacity","kind":"concept","parent":"dispatch","label":"Carrier capacity","description":"The number of parcels a carrier can accept in a dispatch window."},
+    {"id":"policy","kind":"source","parent":"delivery","label":"Delivery policy","description":"Defines the promised window and which deliveries count toward the metric.","reference":{"repository":"parcel-demo","path":"sources/delivery-policy.md"}},
+    {"id":"events","kind":"source","parent":"dispatch","label":"Event dictionary","description":"Defines timestamps recorded at the hub and at delivery.","reference":{"repository":"parcel-demo","path":"sources/event-dictionary.md"}},
+    {"id":"playbook","kind":"source","parent":"dispatch","label":"Dispatch playbook","description":"Documents dispatch cutoffs and how capacity is planned.","reference":{"repository":"parcel-demo","path":"sources/dispatch-playbook.md"}}
+  ],
+  "edges": [
+    {"id":"on-time-window","from":"on-time","to":"delivery-window","kind":"depends_on"},
+    {"id":"on-time-delay","from":"on-time","to":"dispatch-delay","kind":"affected_by"},
+    {"id":"on-time-scan","from":"on-time","to":"events","kind":"measured_from","anchor":"delivery-confirmed"},
+    {"id":"window-policy","from":"delivery-window","to":"policy","kind":"defined_in","anchor":"promised-window"},
+    {"id":"delay-playbook","from":"dispatch-delay","to":"playbook","kind":"defined_in","anchor":"dispatch-cutoff"},
+    {"id":"delay-latency","from":"dispatch-delay","to":"handoff-time","kind":"depends_on"},
+    {"id":"latency-scan","from":"handoff-time","to":"events","kind":"measured_from","anchor":"carrier-accepted"},
+    {"id":"latency-capacity","from":"handoff-time","to":"capacity","kind":"affected_by"},
+    {"id":"capacity-playbook","from":"capacity","to":"playbook","kind":"defined_in","anchor":"carrier-capacity"}
+  ]
+}
